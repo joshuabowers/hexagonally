@@ -3,15 +3,18 @@
   "version": "1.0.0",
   "description": "A TypeScript hexagon grid library inspired by RedBlobGames",
   "main": "index.js",
+  "files": ["lib/**/*"],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/joshuabowers/hexagonally.git"
   },
-  "keywords": [],
+  "keywords": ["hexagonal-grid", "hexagon"],
   "author": "Joshua Bowers",
   "license": "MIT",
   "bugs": {
@@ -19,6 +22,9 @@
   },
   "homepage": "https://github.com/joshuabowers/hexagonally#readme",
   "devDependencies": {
+    "prettier": "^2.0.4",
+    "tslint": "^6.1.1",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.8.3"
   }
 }
