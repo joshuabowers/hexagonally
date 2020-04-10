@@ -27,17 +27,16 @@ export function isAxial(x: Coordinates): x is Axial {
  * @template TValue user defined extra information stored in each Hex.
  */
 export class Hex<TValue> {
-  coordinates: Cuboid;
+  readonly coordinates: Cuboid;
   value: TValue | undefined;
+  readonly symbol: symbol;
 
   constructor(coordinates: Coordinates, value?: TValue) {
     this.coordinates = Hex.detectCoordinates(coordinates);
     this.value = value;
     this.validate();
-  }
-
-  getHash(): number {
-    return 0;
+    Object.freeze(this.coordinates);
+    this.symbol = Symbol.for(this.computeSymbolKey());
   }
 
   toPoint(): Point {
@@ -78,5 +77,10 @@ export class Hex<TValue> {
     if (q + r + s !== 0) {
       throw new RangeError(`Hex(${q}, ${r}, ${s}) invalid: does not zero-sum`);
     }
+  }
+
+  private computeSymbolKey() {
+    const { q, r, s } = this.coordinates;
+    return `hex(${q},${r},${s})`;
   }
 }

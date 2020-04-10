@@ -1,4 +1,7 @@
-import { Hex, Cuboid, Axial, Cartesian, Offset, isCartesian, isCuboid, isAxial } from '../hex';
+import { 
+  Hex, Cuboid, Axial, Cartesian, Offset, 
+  isCartesian, isCuboid, isAxial 
+} from '../hex';
 
 describe(isCuboid, () => {
   it('returns false for cartesian coordinates', () => {
@@ -74,12 +77,6 @@ describe(Hex, () => {
       }).not.toThrow();
     });
 
-    it('stores cuboid coordinates', () => {
-      const cuboid: Cuboid = { q: 5, r: 3, s: -5 - 3 };
-      const hex = new Hex(cuboid);
-      expect(hex.coordinates).toStrictEqual(cuboid);
-    });
-
     it('throws if cuboid coordinates do not zero sum', () => {
       const cuboid: Cuboid = { q: 5, r: 3, s: 0 };
       expect(() => {
@@ -108,10 +105,39 @@ describe(Hex, () => {
     });
   });
 
-  describe('getHash', () => {
-    it('returns a number', () => {
+  describe('coordinates', () => {
+    it('are stored as cuboid', () => {
+      const cuboid: Cuboid = { q: 5, r: 3, s: -5 - 3 };
+      const hex = new Hex(cuboid);
+      expect(hex.coordinates).toStrictEqual(cuboid);
+    });
+
+    it('are frozen', () => {
       const hex = new Hex({ q: 0, r: 0 });
-      expect(hex.getHash()).toBe(0);
+      expect(Object.isFrozen(hex.coordinates)).toBeTruthy();
+      expect(() => {
+        hex.coordinates.q = 5;
+      }).toThrow();
     });
   });
+
+  describe('symbol', () => {
+    it('identifies the hex', () => {
+      const hex = new Hex({ q: 0, r: 1 });
+      expect(hex.symbol).toStrictEqual(Symbol.for('hex(0,1,-1)'));
+    });
+
+    it('is equal for hexes at the same coordinates', () => {
+      const hex1 = new Hex({ q: 0, r: 0 });
+      const hex2 = new Hex({ q: 0, r: 0 });
+      expect(hex1).not.toBe(hex2);
+      expect(hex1.symbol).toEqual(hex2.symbol);
+    });
+
+    it('is different for hexes at different coordinates', () => {
+      const hex1 = new Hex({ q: 0, r: 0 });
+      const hex2 = new Hex({ q: 1, r: 1 });
+      expect(hex1.symbol).not.toEqual(hex2.symbol);
+    });
+  })
 });
