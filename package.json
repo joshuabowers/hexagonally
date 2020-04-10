@@ -1,5 +1,5 @@
 {
-  "name": "hexagonally",
+  "name": "@bowers/hexagonally",
   "version": "1.0.0",
   "description": "A TypeScript hexagon grid library inspired by RedBlobGames",
   "main": "lib/index.js",
