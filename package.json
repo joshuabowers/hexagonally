@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "A TypeScript hexagon grid library inspired by RedBlobGames",
   "main": "index.js",
-  "files": ["lib/**/*"],
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --config jestconfig.json",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
@@ -14,7 +16,10 @@
     "type": "git",
     "url": "git+https://github.com/joshuabowers/hexagonally.git"
   },
-  "keywords": ["hexagonal-grid", "hexagon"],
+  "keywords": [
+    "hexagonal-grid",
+    "hexagon"
+  ],
   "author": "Joshua Bowers",
   "license": "MIT",
   "bugs": {
@@ -22,7 +27,10 @@
   },
   "homepage": "https://github.com/joshuabowers/hexagonally#readme",
   "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "jest": "^25.3.0",
     "prettier": "^2.0.4",
+    "ts-jest": "^25.3.1",
     "tslint": "^6.1.1",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.8.3"

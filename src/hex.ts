@@ -8,18 +8,18 @@ export type Point = { x: number; y: number };
 export type Cuboid = { q: number; r: number; s: number };
 export type Axial = { q: number; r: number };
 export type Cartesian = { col: number; row: number; offset: Offset };
-
 export type Coordinates = Cuboid | Axial | Cartesian;
+
 export function isCuboid(x: Coordinates): x is Cuboid {
   return 's' in x;
 }
 
-export function isAxial(x: Coordinates): x is Axial {
-  return !('s' in x);
-}
-
 export function isCartesian(x: Coordinates): x is Cartesian {
   return 'row' in x && 'col' in x && 'offset' in x;
+}
+
+export function isAxial(x: Coordinates): x is Axial {
+  return !isCuboid(x) && !isCartesian(x);
 }
 
 /**
@@ -28,11 +28,12 @@ export function isCartesian(x: Coordinates): x is Cartesian {
  */
 export class Hex<TValue> {
   coordinates: Cuboid;
-  value: TValue;
+  value: TValue | undefined;
 
-  constructor(coordinates: Coordinates, value: TValue) {
+  constructor(coordinates: Coordinates, value?: TValue) {
     this.coordinates = Hex.detectCoordinates(coordinates);
     this.value = value;
+    this.validate();
   }
 
   toPoint(): Point {
@@ -61,9 +62,17 @@ export class Hex<TValue> {
   }
 
   private static fromCartesian(coordinates: Cartesian): Cuboid {
+    const { row, col, offset } = coordinates;
     return Hex.fromAxial({
-      q: coordinates.col,
-      r: coordinates.row - (coordinates.col + coordinates.offset * (coordinates.col & 1)) / 2,
+      q: col,
+      r: row - (col + offset * (col & 1)) / 2,
     });
+  }
+
+  private validate() {
+    const { q, r, s } = this.coordinates;
+    if (q + r + s !== 0) {
+      throw new RangeError(`Hex(${q}, ${r}, ${s}) invalid: does not zero-sum`);
+    }
   }
 }
