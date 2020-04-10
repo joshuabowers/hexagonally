@@ -107,4 +107,11 @@ describe(Hex, () => {
       expect(hex.value).toStrictEqual(cell);
     });
   });
+
+  describe('getHash', () => {
+    it('returns a number', () => {
+      const hex = new Hex({ q: 0, r: 0 });
+      expect(hex.getHash()).toBe(0);
+    });
+  });
 });

@@ -36,6 +36,10 @@ export class Hex<TValue> {
     this.validate();
   }
 
+  getHash(): number {
+    return 0;
+  }
+
   toPoint(): Point {
     return {
       x: 0,
