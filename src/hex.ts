@@ -62,6 +62,16 @@ export class Hex<TValue> {
     return new Hex({ q: q * k, r: r * k, s: s * k }, this.value);
   }
 
+  length(): number {
+    const { q, r, s } = this.coordinates;
+    const abs = Math.abs;
+    return (abs(q) + abs(r) + abs(s)) / 2;
+  }
+
+  distanceTo(b: Hex<TValue>): number {
+    return this.subtract(b).length();
+  }
+
   toPoint(): Point {
     return {
       x: 0,

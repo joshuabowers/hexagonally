@@ -200,4 +200,25 @@ describe(Hex, () => {
       expect(hex.multiply(10).value).toBe(10);
     });
   });
+
+  describe('length', () => {
+    it('returns the vector length of the coordinates', () => {
+      const hex = new Hex({ q: 1, r: 1 });
+      expect(hex.length()).toBe(2);
+    });
+  });
+
+  describe('distanceTo', () => {
+    it('returns the vector length to the passed hex', () => {
+      const hex1 = new Hex({ q: 1, r: 1 });
+      const hex2 = new Hex({ q: -1, r: -1 });
+      expect(hex1.distanceTo(hex2)).toBe(4);
+    });
+
+    it('returns the same value in either direction', () => {
+      const hex1 = new Hex({ q: 1, r: 1 });
+      const hex2 = new Hex({ q: -1, r: -1 });
+      expect(hex1.distanceTo(hex2)).toEqual(hex2.distanceTo(hex1));
+    });
+  });
 });
