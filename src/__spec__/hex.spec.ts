@@ -139,5 +139,65 @@ describe(Hex, () => {
       const hex2 = new Hex({ q: 1, r: 1 });
       expect(hex1.symbol).not.toEqual(hex2.symbol);
     });
-  })
+  });
+
+  describe('add', () => {
+    it('returns a new Hex', () => {
+      const hex1 = new Hex({ q: 1, r: -1 });
+      const hex2 = new Hex({ q: 1, r: -1 });
+      expect(hex1.add(hex2)).not.toBe(hex1);
+    });
+
+    it('adds the coordinates piecewise', () => {
+      const hex = new Hex({ q: 1, r: -1 });
+      const result = new Hex({ q: 2, r: -2 });
+      expect(hex.add(hex)).toStrictEqual(result);
+    });
+
+    it('copies the callers value', () => {
+      const hex1 = new Hex<number>({ q: 1, r: -1 }, 10);
+      const hex2 = new Hex<number>({ q: 0, r: 5 }, 5);
+      expect(hex1.add(hex2).value).toBe(10);
+    });
+  });
+
+  describe('subtract', () => {
+    it('returns a new Hex', () => {
+      const hex1 = new Hex({ q: 1, r: -1 });
+      const hex2 = new Hex({ q: 1, r: -1 });
+      expect(hex1.subtract(hex2)).not.toBe(hex1);
+    });
+
+    // NOTE: this particular calculation results in an
+    // s-coordinate of -0, which is not make +0 by Hex.
+    it('subtracts the coordinates piecewise', () => {
+      const hex = new Hex({ q: 1, r: -1 });
+      const result = new Hex({ q: 0, r: 0, s: 0 });
+      expect(hex.subtract(hex)).toEqual(result);
+    });
+
+    it('copies the callers value', () => {
+      const hex1 = new Hex<number>({ q: 1, r: -1 }, 10);
+      const hex2 = new Hex<number>({ q: 0, r: 5 }, 5);
+      expect(hex1.subtract(hex2).value).toBe(10);
+    });
+  });
+
+  describe('multiply', () => {
+    it('returns a new Hex', () => {
+      const hex1 = new Hex({ q: 1, r: -1 });
+      expect(hex1.multiply(10)).not.toBe(hex1);
+    });
+
+    it('adds the coordinates piecewise', () => {
+      const hex = new Hex({ q: 1, r: -1 });
+      const result = new Hex({ q: 10, r: -10 });
+      expect(hex.multiply(10)).toStrictEqual(result);
+    });
+
+    it('copies the callers value', () => {
+      const hex = new Hex<number>({ q: 1, r: -1 }, 10);
+      expect(hex.multiply(10).value).toBe(10);
+    });
+  });
 });

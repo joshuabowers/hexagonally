@@ -39,6 +39,29 @@ export class Hex<TValue> {
     this.symbol = Symbol.for(this.computeSymbolKey());
   }
 
+  add(b: Hex<TValue>): Hex<TValue> {
+    const { q, r, s } = this.coordinates;
+    return new Hex({ 
+      q: q + b.coordinates.q, 
+      r: r + b.coordinates.r, 
+      s: s + b.coordinates.s 
+    }, this.value);
+  }
+
+  subtract(b: Hex<TValue>): Hex<TValue> {
+    const { q, r, s } = this.coordinates;
+    return new Hex({ 
+      q: q - b.coordinates.q, 
+      r: r - b.coordinates.r, 
+      s: s - b.coordinates.s 
+    }, this.value);
+  }
+
+  multiply(k: number): Hex<TValue> {
+    const { q, r, s } = this.coordinates;
+    return new Hex({ q: q * k, r: r * k, s: s * k }, this.value);
+  }
+
   toPoint(): Point {
     return {
       x: 0,
