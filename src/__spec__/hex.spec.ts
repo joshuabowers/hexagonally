@@ -3,6 +3,9 @@ import {
   isCartesian, isCuboid, isAxial,
   PointyDirection, FlatDirection
 } from '../hex';
+import { Layout } from '../layout';
+import { Orientation } from '../orientation';
+import { Point } from '../point';
 
 describe(isCuboid, () => {
   it('returns false for cartesian coordinates', () => {
@@ -247,4 +250,22 @@ describe(Hex, () => {
       expect(hex.neighbor(FlatDirection.S)).toStrictEqual(S);
     });
   });
+
+  describe('toPoint', () => {
+    it('returns undefined if no context', () => {
+      const hex = new Hex({ q: 0, r: 0 });
+      expect(() => hex.toPoint()).toThrow(ReferenceError);
+    });
+
+    it('given a context, calls its layout hexToPixel', () => {
+      // const layout = jest.mock('../layout');
+      const layout = new Layout( Orientation.pointy, new Point(1,1), new Point( 0,0 ) );
+      const context = {layout};
+      const hex = new Hex({ q: 0, r: 0 }, 0);
+      hex.context = context;
+      const point = hex.toPoint();
+      const expected = new Point(0, 0);
+      expect(point).toStrictEqual(expected);
+    });
+  })
 });

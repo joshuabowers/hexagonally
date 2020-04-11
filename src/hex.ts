@@ -1,3 +1,6 @@
+import { Context } from "./context";
+import { Point } from './point';
+
 export enum Offset {
   even = +1,
   odd = -1,
@@ -11,8 +14,6 @@ export enum FlatDirection {
 }
 
 export type Direction = PointyDirection | FlatDirection;
-
-export type Point = { x: number; y: number };
 
 export type Cuboid = { q: number; r: number; s: number };
 export type Axial = { q: number; r: number };
@@ -39,6 +40,7 @@ export class Hex<TValue> {
   readonly coordinates: Cuboid;
   value: TValue | undefined;
   readonly symbol: symbol;
+  context: Context | undefined;
 
   constructor(coordinates: Coordinates, value?: TValue) {
     this.coordinates = Hex.detectCoordinates(coordinates);
@@ -87,10 +89,10 @@ export class Hex<TValue> {
   }
 
   toPoint(): Point {
-    return {
-      x: 0,
-      y: 0,
-    };
+    if( !this.context ){
+      throw new ReferenceError('No context for converting a point');
+    }
+    return this.context.layout.hexToPixel(this);
   }
 
   private static detectCoordinates(coordinates: Coordinates): Cuboid {
@@ -131,7 +133,7 @@ export class Hex<TValue> {
     return `hex(${q},${r},${s})`;
   }
 
-  private static directions = [
+  private static directions: Axial[] = [
     { q: 1, r: 0 }, { q: 0, r: 1 }, 
     { q: -1, r: 1 }, { q: -1, r: 0 },
     { q: 0, r: -1 }, { q: 1, r: -1 }
