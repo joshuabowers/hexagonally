@@ -3,6 +3,15 @@ export enum Offset {
   odd = -1,
 }
 
+export enum PointyDirection {
+  E, SE, SW, W, NW, NE
+}
+export enum FlatDirection {
+  SE, S, SW, NW, N, NE
+}
+
+export type Direction = PointyDirection | FlatDirection;
+
 export type Point = { x: number; y: number };
 
 export type Cuboid = { q: number; r: number; s: number };
@@ -72,6 +81,11 @@ export class Hex<TValue> {
     return this.subtract(b).length();
   }
 
+  neighbor( direction: Direction ): Hex<TValue> {
+    const inDirection = new Hex<TValue>(Hex.directions[direction]);
+    return this.add( inDirection );
+  }
+
   toPoint(): Point {
     return {
       x: 0,
@@ -116,4 +130,10 @@ export class Hex<TValue> {
     const { q, r, s } = this.coordinates;
     return `hex(${q},${r},${s})`;
   }
+
+  private static directions = [
+    { q: 1, r: 0 }, { q: 0, r: 1 }, 
+    { q: -1, r: 1 }, { q: -1, r: 0 },
+    { q: 0, r: -1 }, { q: 1, r: -1 }
+  ];
 }

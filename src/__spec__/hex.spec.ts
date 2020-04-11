@@ -1,6 +1,7 @@
 import { 
   Hex, Cuboid, Axial, Cartesian, Offset, 
-  isCartesian, isCuboid, isAxial 
+  isCartesian, isCuboid, isAxial,
+  PointyDirection, FlatDirection
 } from '../hex';
 
 describe(isCuboid, () => {
@@ -159,6 +160,13 @@ describe(Hex, () => {
       const hex2 = new Hex<number>({ q: 0, r: 5 }, 5);
       expect(hex1.add(hex2).value).toBe(10);
     });
+
+    it('adds hexes regardless of generic type', () => {
+      const hex1 = new Hex({ q: 1, r: 0 });
+      const hex2 = new Hex<number>({ q: 1, r: 0 });
+      const result = new Hex({ q: 2, r: 0 });
+      expect(hex1.add(hex2)).toStrictEqual(result);
+    })
   });
 
   describe('subtract', () => {
@@ -219,6 +227,24 @@ describe(Hex, () => {
       const hex1 = new Hex({ q: 1, r: 1 });
       const hex2 = new Hex({ q: -1, r: -1 });
       expect(hex1.distanceTo(hex2)).toEqual(hex2.distanceTo(hex1));
+    });
+  });
+
+  describe('neighbor', () => {
+    it('returns the appropriate hex, in a pointy direction', () => {
+      const hex = new Hex({ q: 0, r: 0 });
+      const E = new Hex({ q: 1, r: 0 });
+      const W = new Hex({ q: -1, r: 0 });
+      expect(hex.neighbor(PointyDirection.E)).toStrictEqual(E);
+      expect(hex.neighbor(PointyDirection.W)).toStrictEqual(W);
+    });
+
+    it('returns the appropriate hex, in a pointy direction', () => {
+      const hex = new Hex({ q: 0, r: 0 });
+      const N = new Hex({ q: 0, r: -1 });
+      const S = new Hex({ q: 0, r: 1 });
+      expect(hex.neighbor(FlatDirection.N)).toStrictEqual(N);
+      expect(hex.neighbor(FlatDirection.S)).toStrictEqual(S);
     });
   });
 });
